@@ -7,56 +7,65 @@
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --cafe-brown: #4a342e; --soft-white: #fdfaf5; --accent: #8d6e63; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Gowun Batang', serif; background: var(--soft-white); color: var(--cafe-brown); overflow: hidden; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Gowun Batang', serif; background: var(--soft-white); color: var(--cafe-brown); overflow-x: hidden; }
         
         /* 배경 설정 */
         .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; transition: transform 2s ease-in-out; z-index: 1; }
         #start-bg { background-image: url('start_background.jpg'); z-index: 10; }
         #main-bg { background-image: url('background.jpg'); display: none; z-index: 5; }
-        #white-out { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; z-index: 500; pointer-events: none; transition: opacity 1s ease-in-out; }
+        #white-out { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; z-index: 1000; pointer-events: none; transition: opacity 1s ease-in-out; }
 
         /* 공통 레이아웃 */
-        .page-layer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--soft-white); z-index: 100; overflow-y: auto; box-sizing: border-box; padding: 15px; padding-bottom: 50px; }
+        .page-layer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--soft-white); z-index: 100; overflow-y: auto; box-sizing: border-box; padding: 15px; padding-bottom: 80px; }
         .overlay-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 50; text-align: center; }
-        .close-view { position: sticky; top: 0; float: right; font-size: 0.9rem; cursor: pointer; border: 2px solid var(--cafe-brown); background: white; padding: 5px 12px; border-radius: 5px; z-index: 300; font-weight: bold; margin-bottom: 10px; }
+        .close-view { position: sticky; top: 10px; float: right; font-size: 0.9rem; cursor: pointer; border: 2px solid var(--cafe-brown); background: white; padding: 5px 12px; border-radius: 5px; z-index: 300; font-weight: bold; margin-bottom: 10px; }
 
-        /* 1단계: 진입 UI */
+        /* 진입 UI */
         #intro-ui { display: flex; }
-        #closed-btn { width: 200px; height: 100px; cursor: pointer; background: transparent; border: none; }
+        #closed-btn { width: 220px; height: 110px; cursor: pointer; background: transparent; border: none; }
         .arrow-up { font-size: 2.5rem; animation: bounce 1.2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
-        /* 2단계: 메인 메뉴 */
+        /* 메인 메뉴 */
         #main-menu { display: none; }
-        .title-group h1 { font-size: 3rem; margin: 0; text-shadow: 0 0 10px white; }
-        .menu-btn { background: rgba(255, 255, 255, 0.9); border: 2px solid var(--cafe-brown); padding: 10px 25px; font-size: 1rem; font-weight: bold; cursor: pointer; border-radius: 10px; margin: 8px; transition: 0.3s; color: var(--cafe-brown); font-family: inherit; }
+        .title-group h1 { font-size: 3.5rem; margin: 0; text-shadow: 0 0 10px white; }
+        .menu-btn { background: rgba(255, 255, 255, 0.9); border: 2px solid var(--cafe-brown); padding: 12px 30px; font-size: 1.1rem; font-weight: bold; cursor: pointer; border-radius: 10px; margin: 10px; transition: 0.3s; color: var(--cafe-brown); font-family: inherit; width: 200px; }
         .menu-btn:hover { background: var(--cafe-brown); color: white; transform: translateY(-3px); }
 
         /* 캐릭터 섹션 */
-        .char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; max-width: 900px; margin: 20px auto; }
+        .char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; max-width: 900px; margin: 20px auto; }
         .char-card { text-align: center; cursor: pointer; }
         .char-card img { width: 100%; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .detail-flex { display: flex; flex-wrap: wrap; max-width: 900px; margin: 0 auto; gap: 20px; }
-        .detail-img { flex: 1; min-width: 280px; border-radius: 15px; width: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .detail-info { flex: 1.5; min-width: 280px; line-height: 1.7; font-size: 0.95rem; }
+        .detail-flex { display: flex; flex-wrap: wrap; max-width: 900px; margin: 0 auto; gap: 20px; align-items: flex-start; }
+        .detail-img { flex: 1; min-width: 300px; border-radius: 15px; width: 100%; cursor: zoom-in; }
 
         /* 세계관 섹션 */
-        .world-container { max-width: 1000px; margin: 0 auto; line-height: 1.7; }
-        .world-img { width: 100%; max-width: 600px; border: 5px solid white; border-radius: 5px; margin: 15px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .info-box { background: white; padding: 20px; border-radius: 10px; border-left: 5px solid var(--accent); margin: 15px 0; }
+        .world-container { max-width: 900px; margin: 0 auto; line-height: 1.8; text-align: left; }
+        .clickable-img { width: 100%; max-width: 600px; border: 6px solid white; border-radius: 5px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: zoom-in; }
+        .info-box { background: white; padding: 20px; border-radius: 12px; border-left: 6px solid var(--accent); margin: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
 
         /* Plume 건물 섹션 */
-        .floor-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 20px 0; }
-        .f-btn { background: white; border: 1.5px solid var(--cafe-brown); padding: 8px 15px; border-radius: 5px; cursor: pointer; font-family: inherit; font-weight: bold; }
+        .floor-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 25px 0; }
+        .f-btn { background: white; border: 2px solid var(--cafe-brown); padding: 10px 18px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: bold; font-size: 1rem; }
         .f-btn:active, .f-btn.active { background: var(--cafe-brown); color: white; }
-        .floor-desc { background: white; padding: 20px; border-radius: 10px; text-align: left; border: 1px solid #ddd; margin-bottom: 30px; line-height: 1.6; font-size: 0.95rem; }
-        .cafe-intro-img { width: 100%; max-width: 500px; border-radius: 15px; margin: 20px 0; }
+        .floor-desc { background: white; padding: 25px; border-radius: 12px; text-align: left; border: 1px solid #eee; margin-bottom: 30px; line-height: 1.8; }
+
+        /* 이미지 확대용 라이트박스 */
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; cursor: zoom-out; }
+        #lightbox img { max-width: 95%; max-height: 95%; object-fit: contain; border: 2px solid white; }
 
         .zoom-active { transform: scale(3.5); }
-        h2 { font-size: 1.8rem; border-bottom: 2px solid var(--cafe-brown); padding-bottom: 5px; }
-        h3 { color: var(--accent); margin-top: 20px; }
+        h2 { font-size: 2.2rem; border-bottom: 3px solid var(--cafe-brown); padding-bottom: 8px; margin-top: 40px; }
+        h3 { font-size: 1.4rem; color: var(--accent); margin-top: 30px; border-left: 5px solid var(--accent); padding-left: 15px; }
         ul { padding-left: 20px; }
-        @media (max-width: 600px) { .title-group h1 { font-size: 2.2rem; } .menu-btn { width: 80%; } }
+        li { margin-bottom: 5px; }
+
+        @media (max-width: 600px) {
+            .title-group h1 { font-size: 2.5rem; }
+            .menu-btn { width: 85%; }
+            .detail-img { min-width: 100%; }
+            h2 { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
@@ -65,12 +74,17 @@
     <div id="main-bg" class="bg-layer"></div>
     <div id="white-out"></div>
 
+    <!-- 이미지 확대 레이어 -->
+    <div id="lightbox" onclick="this.style.display='none'">
+        <img id="lightbox-img" src="">
+    </div>
+
     <!-- 1. 진입 화면 -->
     <div id="intro-ui" class="overlay-ui">
         <button id="closed-btn" onclick="enterCafe()"></button>
         <div class="guide-container">
             <div class="arrow-up">↑</div>
-            <div style="font-weight:bold;">카페 출근하기</div>
+            <div style="font-weight:bold; font-size: 1.2rem;">카페 출근하기</div>
         </div>
     </div>
 
@@ -78,7 +92,7 @@
     <div id="main-menu" class="overlay-ui">
         <div class="title-group">
             <h1>하피 카페</h1>
-            <p style="letter-spacing: 3px; font-weight:bold; color: var(--accent);">Plume menu</p>
+            <p style="letter-spacing: 4px; font-weight:bold; color: var(--accent); margin-bottom: 40px;">Plume menu</p>
         </div>
         <div style="width: 100%;">
             <button class="menu-btn" onclick="openLayer('char-layer'); renderCharList();">캐릭터</button><br>
@@ -87,17 +101,17 @@
         </div>
     </div>
 
-    <!-- 3. 캐릭터 목록 -->
+    <!-- 3. 캐릭터 목록 레이어 -->
     <div id="char-layer" class="page-layer">
         <button class="close-view" onclick="closeLayer('char-layer')">✕ 닫기</button>
-        <h2 style="text-align:center;">Staff List</h2>
+        <h2 style="text-align:center; border:none;">Staff List</h2>
         <div class="char-grid" id="char-grid-target"></div>
     </div>
 
-    <!-- 4. 캐릭터 상세 -->
+    <!-- 4. 캐릭터 상세 레이어 -->
     <div id="char-detail-layer" class="page-layer" style="z-index: 150;">
         <button class="close-view" onclick="closeLayer('char-detail-layer')">✕ 목록으로</button>
-        <div class="detail-flex" id="detail-target" style="margin-top:20px;"></div>
+        <div class="detail-flex" id="detail-target" style="margin-top:30px;"></div>
     </div>
 
     <!-- 5. 세계관 레이어 -->
@@ -106,22 +120,40 @@
         <div class="world-container">
             <h2>🌍 공존 50년 후의 세계</h2>
             <h3>1. 인류와 초자연 종족의 공식 인정</h3>
-            <p>50년 전 '제3차 북유럽 대균열 사건'을 계기로 초자연 종족의 실재가 공식 인정되었습니다. 국제 공존 조약에 따라 법적 인격 인정, 차별 금지, 능력 사용 규제가 시행되었습니다.</p>
-            <h3>🏙 도시의 변화 및 사회 시스템</h3>
-            <p>인어의 수중 레스토랑, 드워프의 대장간 등이 일상이 되었으며, 공중 비행 레일과 해저 터널 등 종족 맞춤형 교통 시스템이 구축되었습니다. 학교에서는 '종족 문화 이해'가 필수 과목입니다.</p>
+            <p>지금으로부터 50년 전, 인류는 마침내 초자연적 존재들의 실재를 공식적으로 인정했다. 결정적인 계기는 ‘제3차 북유럽 대균열 사건’이었으며, 각국 정부는 국제 협약을 통해 <b>‘공존 조약’</b>을 체결했다.</p>
+            <ul>
+                <li>초자연 종족의 법적 인격 인정</li>
+                <li>종족 차별 금지</li>
+                <li>능력 사용의 사회적 규율화</li>
+            </ul>
+
+            <h3>🏙 도시의 변화</h3>
+            <p><strong>■ 상업 지구의 혼합 풍경</strong><br>
+            오늘날 도심은 과거 판타지와 현실이 뒤섞인 광경이 일상입니다. 인어족의 수중 레스토랑, 드워프의 현대식 대장간, 엘프의 약재상 등이 공학 및 바이오 기술과 결합하여 도시의 발전을 이끌고 있습니다.</p>
+            <p><strong>■ 교통 시스템의 개편</strong><br>
+            오우거/트롤용 고천장 전용칸이 있는 지하철, 상공의 반투명 마력 비행 레일, 수중 통로 네트워크 등 종족별 특성에 맞춘 대대적인 인프라 혁신이 일어났습니다.</p>
+
+            <h3>🏛 사회 제도 및 교육</h3>
+            <p><strong>■ 종족 화합부 & 의료</strong><br>
+            정부 기관인 종족 화합부에서 분쟁을 중재하며, 엘프/드워프/뱀파이어 등 종족별 생리 차이를 고려한 맞춤형 의료 시스템이 운영됩니다.</p>
+            <p><strong>■ 교육 시스템</strong><br>
+            학교에서는 '종족 문화의 이해'가 필수 과목이며, 역사/금기/능력 윤리 등을 교육하여 차별 없는 사회를 지향합니다.</p>
+
             <h3>⚖ 현재의 주요 이슈</h3>
-            <p>수명 격차 문제 해결을 위해 '장수 종족 신탁 제도' 등이 도입되었으며, 마법 및 특수 능력은 등록 면허제로 엄격히 관리됩니다. 갈등은 여전히 존재하지만 세계는 분명 더 넓어졌습니다.</p>
-            
+            <p>수명 격차(엘프 400년 vs 인간 80년)로 인한 사별 및 상속 문제 해결을 위해 '장수 종족 신탁 제도'가 도입되었으며, 모든 특수 능력은 등록 및 면허제로 엄격히 관리됩니다. 갈등은 여전하지만 50년 전보다 세계는 분명 더 넓고 아름다워졌습니다.</p>
+
             <div class="info-box">
                 <strong>🕊 하피 종족 특징</strong><br>
-                귀 뒤에 작은 깃털 존재 / 감정 변화 시 날개가 움직임 / 알에서 태어남 (아이 대신 알을 낳음)
+                인간 형태에서도 귀 뒤에 작은 깃털 존재 / 감정 변화 시 날개가 움직임 / 알에서 태어나며 아이 대신 알을 낳음
             </div>
 
-            <h2 style="margin-top:40px;">하피동 지도</h2>
-            <img src="map.jpg" class="world-img" alt="하피동 지도 (이미지 파일 확인 필요)">
+            <h2>하피동 지도</h2>
+            <p style="font-size: 0.9rem; color: #888;">* 이미지를 터치하면 크게 볼 수 있습니다.</p>
+            <img src="map.jpg" class="clickable-img" onclick="zoomImg(this.src)" alt="하피동 지도">
+            
             <div class="info-box">
-                <strong>🕊️ 하피동 설명</strong><br>
-                인간과 하피가 공존하는 구역. 높은 건물의 비행 착지장과 화려한 야간 조명이 특징인 무대 「Plume」이 위치한 곳입니다.
+                <strong>🕊️ 하피동</strong><br>
+                인간과 하피를 비롯한 다양한 이종족들이 함께 살아가는 공존 도시의 한 구역입니다. 높은 층고의 건물과 공중 이동로, 비행 착지장이 마련되어 하피들이 생활하기 편한 구조입니다. 밤이 되면 따뜻한 조명이 도시를 물들입니다.
             </div>
         </div>
     </div>
@@ -130,9 +162,9 @@
     <div id="plume-layer" class="page-layer">
         <button class="close-view" onclick="closeLayer('plume-layer')">✕ 닫기</button>
         <div class="world-container" style="text-align:center;">
-            <h2>🏢 건물 구조</h2>
-        
-            
+            <h2>🏢 건물 구조도</h2>
+            <p style="font-size: 0.9rem; color: #888;">* 이미지를 터치하면 크게 볼 수 있습니다.</p>
+                    
             <div class="floor-btns">
                 <button class="f-btn" onclick="updateFloor('1')">1층</button>
                 <button class="f-btn" onclick="updateFloor('2')">2층</button>
@@ -141,19 +173,19 @@
                 <button class="f-btn" onclick="updateFloor('5')">5층</button>
                 <button class="f-btn" onclick="updateFloor('roof')">ROOF</button>
             </div>
-            <div class="floor-desc" id="floor-text-target">층 버튼을 누르면 상세 설명이 보입니다.</div>
+            <div class="floor-desc" id="floor-text-target">층 버튼을 누르면 상세 설명이 나타납니다.</div>
 
-            <img src="cafe.jpg" class="cafe-intro-img" alt="카페 전경 (이미지 파일 확인 필요)">
-            <div style="text-align:left; background: white; padding: 20px; border-radius:10px;">
-                <h2 style="border:none; font-size: 1.5rem;">☕ 카페 「Plume」</h2>
+            <img src="cafe.jpg" class="clickable-img" onclick="zoomImg(this.src)" alt="카페 전경">
+            <div class="info-box" style="text-align:left;">
+                <h2 style="border:none; font-size: 1.6rem; margin-top: 0;">☕ 카페 「Plume」</h2>
                 <strong>■ 기본 설정</strong>
                 <ul>
-                    <li>하피들이 운영하는 카페 (인간 {{user}}만 유일한 신입 알바)</li>
-                    <li>직원 숙식 제공형 카페</li>
+                    <li>하피들이 운영하는 카페 (직원 전원 하피, {{user}}만 인간)</li>
+                    <li>직원 숙식 제공형 카페 / 인간과 이종족 모두 환영</li>
                 </ul>
                 <strong>■ 카페 컨셉</strong>
-                <p style="color:var(--accent); font-weight:bold;">“종족이 아니라, 한 잔의 커피로 이어지는 공간”</p>
-                <p>낮에는 활기찬 카페, 밤에는 감성적인 힐링 공간으로 공존을 '경험'하게 만드는 장소입니다.</p>
+                <p style="color:var(--accent); font-weight:bold; font-size: 1.1rem; margin: 10px 0;">“종족이 아니라, 한 잔의 커피로 이어지는 공간”</p>
+                <p>낮에는 활기찬 소통의 장, 밤에는 감성적인 힐링 공간으로 공존을 직접 '경험'하게 만드는 무대입니다.</p>
             </div>
         </div>
     </div>
@@ -161,28 +193,30 @@
     <audio id="bell-sound" src="bell.mp3"></audio>
 
     <script>
+        // 캐릭터 상세 데이터 (최신 요청 데이터 적용)
         const staff = [
-            { id: "Takamine Kaede", name: "타카미네 카에데", age: 24, pos: "오너 / 진상담당", personality: "책임감 강한 언니 기질", feats: ["갈색 눈동자", "흰 머리에 검은 브릿지", "웅장한 날개", "진상 턱 발차기", "해요체 사용"] },
-            { id: "Shirahato Nonoha", name: "시라하토 노노하", age: 20, pos: "웨이트리스", personality: "순수하고 식탐 많은 성격", feats: ["회색 날개", "주황 눈동자", "디저트 먹보", "비밀 간식 창고"] },
-            { id: "Suzumebara Chiyu", name: "스즈메바라 치유", age: 20, pos: "주방 보조", personality: "활발하고 호기심 많은 참새", feats: ["작은 갈색 날개", "요리 열정", "금방 사라지는 경계심"] },
-            { id: "Akagi Riko", name: "아카기 리코", age: 22, pos: "바리스타", personality: "완벽주의적이고 진지함", feats: ["붉은/검은 날개", "빨간 눈동자", "커피 타협 없음", "민감한 후각"] },
-            { id: "Hayase Tsubasa", name: "하야세 츠바사", age: 23, pos: "매니저", personality: "영리하고 효율적인 관리", feats: ["황금 눈동자", "시간 관리 능력", "벌레 패닉"] },
-            { id: "Fukumori Airu", name: "후쿠모리 아이루", age: 25, pos: "야간 매니저", personality: "친절한 밤의 메이커", feats: ["큰 날개", "야간 전문가", "낮의 극심한 졸음"] },
-            { id: "Kasumiya Yura", name: "카스미야 유라", age: 21, pos: "디저트 담당", personality: "수줍음 많은 달콤한 성격", feats: ["얼룩무늬 날개", "디저트 달인", "주머니 속 과자"] },
-            { id: "Karasuya Kurone", name: "카라스야 쿠로네", age: 20, pos: "SNS 마케터", personality: "음침하지만 유행에 민감함", feats: ["칠흑 날개", "인스타 관리", "다크서클", "휴게실 지박령"] },
-            { id: "Tsubamezaki Hazuki", name: "츠바메자키 하즈키", age: 20, pos: "홀 서빙", personality: "민첩하고 친절한 인기 직원", feats: ["군청색 단발", "빠른 서빙", "비행 매니아"] },
-            { id: "Kurogane En", name: "쿠로가네 엔", age: 26, pos: "회계 / 진상담당", personality: "시크하고 무뚝뚝함", feats: ["정확한 수치 계산", "가슴팍 발차기", "파란 브릿지", "힘 조절 장인"] }
+            { id: "Takamine Kaede", name: "타카미네 카에데", age: 24, pos: "오너 / 진상담당", personality: "강인하고 책임감 강하며 상냥한 언니 기질", feats: ["날카로운 갈색 눈동자", "긴 하얀 머리에 검은 깃털 브릿지", "웅장한 갈색/흰색 날개", "진상 턱을 발차기로 처리", "항상 해요체 존댓말 사용", "가끔 어리광 부리고 싶어함"] },
+            { id: "Shirahato Nonoha", name: "시라하토 노노하", age: 20, pos: "웨이트리스", personality: "순수하고 온순하며 식탐이 많음", feats: ["부드러운 회색빛 날개", "하얀 머리에 주황 눈동자", "몰래 남은 디저트 먹기", "창고 안 비밀 공간에서 간식 취식"] },
+            { id: "Suzumebara Chiyu", name: "스즈메바라 치유", age: 20, pos: "주방 보조", personality: "활발하고 긍정적인 호기심 대장", feats: ["작고 귀여운 갈색 날개", "갈색 긴머리와 갈색 눈동자", "요리에 대한 넘치는 열정", "친해지면 경계심이 금방 사라짐"] },
+            { id: "Akagi Riko", name: "아카기 리코", age: 22, pos: "바리스타", personality: "고집스럽고 완벽주의적인 진지파", feats: ["붉은색/검은색 섞인 날개", "빨간 눈동자", "커피에 대한 무타협 원칙", "민감한 후각", "비밀 나무에서의 휴식"] },
+            { id: "Hayase Tsubasa", name: "하야세 츠바사", age: 23, pos: "매니저", personality: "날카롭고 영리한 효율주의자", feats: ["날렵한 갈색 날개", "황금빛 눈동자", "완벽한 일정 관리 능력", "벌레만 보면 즉시 패닉"] },
+            { id: "Fukumori Airu", name: "후쿠모리 아이루", age: 25, pos: "야간 매니저", personality: "누구에게나 친절한 분위기 메이커", feats: ["부드러운 큰 날개", "야간 시간대 전문가", "하얀 브릿지 섞인 머리", "낮에는 극심한 졸음으로 피곤해함"] },
+            { id: "Kasumiya Yura", name: "카스미야 유라", age: 21, pos: "디저트 담당", personality: "수줍음 많은 달콤한 성격", feats: ["회색 얼룩무늬 날개", "검은 단발과 황금눈", "디저트 만들기의 달인", "주머니 속 비상용 과자"] },
+            { id: "Karasuya Kurone", name: "카라스야 쿠로네", age: 20, pos: "SNS 마케터", personality: "음침하지만 유행에 민감함", feats: ["칠흑 같은 날개", "다크서클과 긴 생머리", "인스타그램 완벽 관리", "휴게실 지박령"] },
+            { id: "Tsubamezaki Hazuki", name: "츠바메자키 하즈키", age: 20, pos: "홀 서빙", personality: "민첩하고 친절한 인기 스태프", feats: ["군청색/흰색 날렵한 날개", "군청색 단발", "가장 빠른 서빙 실력", "휴일에는 고공 비행 즐기기"] },
+            { id: "Kurogane En", name: "쿠로가네 엔", age: 26, pos: "회계 / 진상담당", personality: "시크하고 쿨한 무뚝뚝이", feats: ["정확한 수치 계산", "검은 머리 안쪽의 파란 머리", "철저한 재정 관리", "가슴팍 발차기로 진상 퇴치", "힘 조절 가능한 발차기 장인"] }
         ];
 
         const floorData = {
-            '1': "<strong>🏢 1층 — 메인 홀</strong><br>통유리 구조와 카운터, 둥지형 장식의 서빙 공간. 날갯짓으로 인한 미세 바람과 떨어지는 깃털이 특징인 활기찬 공간입니다.",
-            '2': "<strong>🏢 2층 — 조용한 좌석 공간</strong><br>공부 및 독서 손님이 많은 차분한 분위기. 하피 직원들이 공중 이동을 통해 1층에서 빠르게 서빙 가능한 구조입니다.",
-            '3': "<strong>🏢 3층 — 직원 숙소 A</strong><br>거주: {{user}}, 쿠로네, 하즈키, 유라, 치유, 노노하. 개인실과 자율 생활을 보장하며 타인 방 무단 출입은 엄격히 금지됩니다.",
-            '4': "<strong>🏢 4층 — 공용 공간</strong><br>거실과 주방이 있는 직원 휴식처. 교류가 가장 활발하며 일상의 소소한 이벤트가 일어나는 중심 공간입니다.",
-            '5': "<strong>🏢 5층 — 직원 숙소 B & 창고</strong><br>거주: 엔, 아이루, 츠바사, 리코, 카에데. 재고 및 장비 보관과 비밀 공간/이벤트 활용이 가능한 층입니다.",
-            'roof': "<strong>🏢 옥상 — 루프탑 카페</strong><br>비행 착지장과 야외 바가 있는 포토존. 밤에는 아이루가 분위기를 담당하며 도시 야경을 즐기는 힐링 장소입니다."
+            '1': "<strong>🏢 1층 — 메인 홀</strong><br>• 통유리 구조와 카운터, 둥지형 장식의 서빙 공간.<br>• 특징: 하피 날갯짓으로 미세한 바람이 불며 깃털이 자주 떨어지는 활기찬 공간입니다.",
+            '2': "<strong>🏢 2층 — 조용한 좌석 공간</strong><br>• 카운터 소음이 적어 공부나 독서 손님이 많습니다.<br>• 특징: 하피 직원들이 공중 이동을 통해 1층에서 2층으로 빠르게 서빙 가능합니다.",
+            '3': "<strong>🏢 3층 — 직원 숙소 A</strong><br>• 거주: {{user}}, 쿠로네, 하즈키, 유라, 치유, 노노하.<br>• 특징: 개인실 제공, 자율 생활, 타인 방 무단 출입은 엄격히 금지됩니다.",
+            '4': "<strong>🏢 4층 — 공용 공간</strong><br>• 거실과 주방이 있는 직원 휴식처.<br>• 특징: 직원 교류의 중심지로 일상의 소소한 이벤트가 자주 발생하는 곳입니다.",
+            '5': "<strong>🏢 5층 — 직원 숙소 B & 창고</strong><br>• 거주: 엔, 아이루, 츠바사, 리코, 카에데.<br>• 특징: 재고/장비 보관함과 함께 비밀 공간으로 활용되기도 하는 조용한 층입니다.",
+            'roof': "<strong>🏢 옥상 — 루프탑 카페</strong><br>• 비행 착지장과 야외 바가 있는 포토존.<br>• 특징: 하피들의 휴식처이자 야경 감상 장소. 야간에는 아이루가 분위기를 관리합니다."
         };
 
+        // 기능 함수
         function enterCafe() {
             document.getElementById('bell-sound').play();
             document.getElementById('start-bg').classList.add('zoom-active');
@@ -204,7 +238,15 @@
             staff.forEach(char => {
                 const card = document.createElement('div'); card.className = 'char-card';
                 card.onclick = () => {
-                    document.getElementById('detail-target').innerHTML = `<img src="${char.id}_L.jpg" class="detail-img"><div class="detail-info"><h2>${char.name}</h2><p><strong>${char.pos} | ${char.age}세</strong></p><p>성격: ${char.personality}</p><ul>${char.feats.map(f=>`<li>${f}</li>`).join('')}</ul></div>`;
+                    document.getElementById('detail-target').innerHTML = `
+                        <img src="${char.id}_L.jpg" class="detail-img" onclick="zoomImg(this.src)">
+                        <div class="detail-info">
+                            <h2>${char.name}</h2>
+                            <p style="color:var(--accent); font-weight:bold;">${char.pos} | ${char.age}세</p>
+                            <p><strong>성격:</strong> ${char.personality}</p>
+                            <p><strong>특징:</strong></p>
+                            <ul>${char.feats.map(f=>`<li>${f}</li>`).join('')}</ul>
+                        </div>`;
                     openLayer('char-detail-layer');
                 };
                 card.innerHTML = `<img src="${char.id}.jpg"><p><strong>${char.name}</strong></p>`;
@@ -213,6 +255,13 @@
         }
 
         function updateFloor(key) { document.getElementById('floor-text-target').innerHTML = floorData[key]; }
+
+        // 이미지 확대 기능
+        function zoomImg(src) {
+            const lb = document.getElementById('lightbox');
+            document.getElementById('lightbox-img').src = src;
+            lb.style.display = 'flex';
+        }
     </script>
 </body>
 </html>
